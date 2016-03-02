@@ -5,31 +5,32 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "blg_blog".
+ * This is the model class for table "blg_comment".
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $description
- * @property string $article
+ * @property integer $blog_id
+ * @property string $comment
  * @property string $create_date
  *
  * @property User $user
- * @property Comment[] $comments
+ * @property Blog $blog
  */
-class Blog extends \yii\db\ActiveRecord
+class Comment extends \yii\db\ActiveRecord
 {
     /**
      * Validate constants
      */
-    const DESCRIPTION_MAX_LENGTH = 255;
-    const ARTICLE_MAX_LENGTH = 65000;
+    const COMMENT_MAX_LENGTH = 255;
+    
+    public $user_name;
     
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'blg_blog';
+        return 'blg_comment';
     }
 
     /**
@@ -38,15 +39,16 @@ class Blog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'description', 'article'], 'required'],
-            [['user_id'], 'integer'],
-            // проверка отношения внешнего ключа (есть ли такой пользователь в таблице user)
+            [['comment'], 'required'],
+            [['user_id', 'blog_id'], 'integer'],
             ['user_id', 'exist',
                 'targetClass' => User::className(),
                 'targetAttribute' => 'id'],
-            [['article'], 'string', 'max' => self::ARTICLE_MAX_LENGTH],
+            ['blog_id', 'exist',
+                'targetClass' => Blog::className(),
+                'targetAttribute' => 'id'],
             [['create_date'], 'safe'],
-            [['description'], 'string', 'max' => self::DESCRIPTION_MAX_LENGTH]
+            [['comment'], 'string', 'max' => self::COMMENT_MAX_LENGTH]
         ];
     }
 
@@ -57,9 +59,9 @@ class Blog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'Пользователь',
-            'description' => 'Описание',
-            'article' => 'Статья',
+            'user_name' => 'Пользователь',
+            'blog_id' => 'ID блога',
+            'comment' => 'Комментарий',
             'create_date' => 'Дата создания',
         ];
     }
@@ -78,7 +80,7 @@ class Blog extends \yii\db\ActiveRecord
             return false;
         }            
     }
-
+    
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -90,20 +92,17 @@ class Blog extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    /*
-    public function getComments()
+    public function getBlog()
     {
-        return $this->hasMany(Comment::className(), ['blog_id' => 'id']);
+        return $this->hasOne(Blog::className(), ['id' => 'blog_id']);
     }
-     * 
-     */
 
     /**
      * @inheritdoc
-     * @return BlogQuery the active query used by this AR class.
+     * @return CommentQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new BlogQuery(get_called_class());
+        return new CommentQuery(get_called_class());
     }
 }
