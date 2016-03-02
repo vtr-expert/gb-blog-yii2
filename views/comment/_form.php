@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 
 <div class="comment-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => '/comment/create']); ?>
 
     <?= $form->field($model, 'comment')->textInput(['maxlength' => true]) ?>
     

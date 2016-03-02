@@ -59,6 +59,7 @@ class Comment extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'user_id' => 'Пользователь',
             'user_name' => 'Пользователь',
             'blog_id' => 'ID блога',
             'comment' => 'Комментарий',
