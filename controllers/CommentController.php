@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Comment;
 use app\models\CommentSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -17,10 +18,21 @@ class CommentController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'logout' => ['post'],
                 ],
             ],
         ];
