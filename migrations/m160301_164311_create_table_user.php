@@ -14,6 +14,7 @@ class m160301_164311_create_table_user extends Migration
                 `name` varchar(45) NOT NULL,
                 `password` varchar(255) NOT NULL,
                 `salt` varchar(255) NOT NULL,
+                `auth_key` varchar(255) NOT NULL,
                 `access_token` varchar(255) NULL DEFAULT NULL,
                 `create_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`),
